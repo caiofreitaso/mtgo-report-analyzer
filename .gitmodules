@@ -1,0 +1,3 @@
+[submodule "MTGODecklistCache"]
+	path = MTGODecklistCache
+	url = git@github.com:Badaro/MTGODecklistCache.git

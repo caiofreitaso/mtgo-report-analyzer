@@ -1,0 +1,16 @@
+{
+  "name": "mtgo-analyzer-migrate-tool",
+  "version": "0.0.1",
+  "description": "Migration tool for Analyzer of MTGO's reports",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Caio Freitas de Oliveira",
+  "license": "ISC",
+  "dependencies": {
+    "db-migrate": "^0.11.11",
+    "db-migrate-pg": "^1.2.2"
+  }
+}
