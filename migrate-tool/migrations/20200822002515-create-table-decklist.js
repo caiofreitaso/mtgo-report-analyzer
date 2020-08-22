@@ -20,7 +20,7 @@ exports.up = function(db) {
   return db.createTable(TABLE_NAME, {
     id: { type: 'int', primaryKey: true, autoIncrement: true, unsigned: true },
     deck_id: { type: 'int', notNull: true },
-    card_id: { type: 'int', notNull: true },
+    card_id: { type: 'string', notNull: true },
     quantity: { type: 'int', unsigned: true, notNull: true },
     is_sideboard: { type: 'bool', notNull: true }
   });

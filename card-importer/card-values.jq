@@ -65,4 +65,4 @@ def join_lowercase: map("'" + (. | ascii_downcase) + "'") | join(",");
     )
   + ")")
 | join(",\n"))
-+ ";"
++ "ON CONFLICT DO NOTHING;"

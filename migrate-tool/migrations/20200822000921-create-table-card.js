@@ -18,8 +18,8 @@ exports.setup = function(options, seedLink) {
 
 exports.up = function(db) {
   return db.createTable(TABLE_NAME, {
-    id: { type: 'int', primaryKey: true, autoIncrement: true, unsigned: true },
-    name: { type: 'string', notNull: true },
+    // id: { type: 'int', primaryKey: true, autoIncrement: true, unsigned: true },
+    name: { type: 'string', notNull: true, primaryKey: true },
     types: { type: 'card_type[]', notNull: true },
     colors: { type: 'card_color[]', notNull: true },
     effective_colors: { type: 'card_color[]', notNull: true },

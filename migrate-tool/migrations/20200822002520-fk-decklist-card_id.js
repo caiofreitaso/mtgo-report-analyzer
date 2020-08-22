@@ -19,7 +19,7 @@ exports.setup = function(options, seedLink) {
 
 exports.up = function(db) {
   return db.addForeignKey(TABLE_NAME, 'card', KEY_NAME, {
-    card_id: 'id'
+    card_id: 'name'
   }, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT'
