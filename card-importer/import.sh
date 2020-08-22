@@ -77,7 +77,7 @@ MTG_MODERN_SETS=(
 )
 
 CARD_JQ_FILTER="$(cat card-values.jq)"
-DATABASE_URL="$(node -e "console.log(require('../config.js').databaseUrl())")"
+DATABASE_URL="$(../get-database-url.sh)"
 
 echo [Basic Lands]
 psql "${DATABASE_URL}" < basic-lands.sql

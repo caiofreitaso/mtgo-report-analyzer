@@ -1,0 +1,12 @@
+{
+  "name": "badaro-importer",
+  "version": "0.0.1",
+  "description": "Importer from Badaro's MTGO Decklist Cache",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Caio Freitas de Oliveira",
+  "license": "ISC"
+}
