@@ -18,16 +18,11 @@ exports.setup = function(options, seedLink) {
 
 exports.up = function(db) {
   return db.runSql(`
-CREATE OR REPLACE FUNCTION ${FUNCTION_NAME}(deck_1 int, deck_2 int)
+CREATE OR REPLACE FUNCTION deck_distance(deck_1 int, deck_2 int)
 RETURNS bigint
 AS $$
 WITH
-lands AS (
-    SELECT name
-    FROM card
-    WHERE NOT card.types && ARRAY['land']::card_type[]
-),
-maindeck AS (
+nonland AS (
     SELECT
         deck_id,
         card_name,
@@ -35,20 +30,19 @@ maindeck AS (
     FROM decklist
     WHERE (deck_id = deck_1
     OR deck_id = deck_2)
-    AND NOT is_sideboard
-),
-nonland AS (
-    SELECT *
-    FROM maindeck
-    WHERE card_name NOT IN (SELECT * FROM lands)
+    AND is_nonland_main
 ),
 decklist_1 AS (
-    SELECT card_name
+    SELECT
+      card_name,
+      quantity
     FROM nonland
     WHERE deck_id = deck_1
 ),
 decklist_2 AS (
-    SELECT card_name
+    SELECT
+      card_name,
+      quantity
     FROM nonland
     WHERE deck_id = deck_2
 )
@@ -58,8 +52,8 @@ FROM (
     SELECT
         d1.card_name,
         ABS(d1.quantity - d2.quantity) AS diff
-    FROM nonland d1
-    FULL JOIN nonland d2
+    FROM decklist_1 d1
+    JOIN decklist_2 d2
     ON d1.card_name = d2.card_name
     AND d1.quantity <> d2.quantity
 

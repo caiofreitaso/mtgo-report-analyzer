@@ -4,7 +4,7 @@ var dbm;
 var type;
 var seed;
 
-const TABLE_NAME = 'deck';
+const TABLE_NAME = 'meta';
 
 /**
   * We receive the dbmigrate dependency from dbmigrate initially.
@@ -19,9 +19,9 @@ exports.setup = function(options, seedLink) {
 exports.up = function(db) {
   return db.createTable(TABLE_NAME, {
     id: { type: 'int', primaryKey: true, autoIncrement: true, unsigned: true },
-    tournament_id: { type: 'int', notNull: true },
-    player: { type: 'string', notNull: true },
-    position: { type: 'int', notNull: true }
+    archetype_id: { type: 'int', notNull: true },
+    deck_id: { type: 'int', notNull: true },
+    distance: { type: 'bigint', defaultValue: 120 }
   });
 };
 

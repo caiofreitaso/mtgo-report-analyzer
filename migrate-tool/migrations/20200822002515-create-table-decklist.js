@@ -22,7 +22,8 @@ exports.up = function(db) {
     deck_id: { type: 'int', notNull: true },
     card_name: { type: 'string', notNull: true },
     quantity: { type: 'int', unsigned: true, notNull: true },
-    is_sideboard: { type: 'bool', notNull: true }
+    is_sideboard: { type: 'bool', notNull: true },
+    is_nonland_main: { type: 'bool', notNull: true, defaultValue: false }
   });
 };
 

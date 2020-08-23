@@ -86,8 +86,10 @@ for SET in "${MTG_MODERN_SETS[@]}"
 do
   echo [${SET}]
 
-  curl -s https://mtgjson.com/api/v5/${SET}.json?a | jq "${CARD_JQ_FILTER}" -r> ${SET}.sql
-  psql "${DATABASE_URL}" < ${SET}.sql
+  if [ ! -f ./${SET}.json ]
+  then
+  curl -s https://mtgjson.com/api/v5/${SET}.json?a > ${SET}.json
+  fi
 
-  rm ${SET}.sql
+  cat ${SET}.json | jq "${CARD_JQ_FILTER}" -r | psql "${DATABASE_URL}"
 done

@@ -4,7 +4,8 @@ var dbm;
 var type;
 var seed;
 
-const TABLE_NAME = 'deck';
+const TABLE_NAME = 'archetype';
+const KEY_NAME = 'fk__archetype__median_id';
 
 /**
   * We receive the dbmigrate dependency from dbmigrate initially.
@@ -17,16 +18,16 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return db.createTable(TABLE_NAME, {
-    id: { type: 'int', primaryKey: true, autoIncrement: true, unsigned: true },
-    tournament_id: { type: 'int', notNull: true },
-    player: { type: 'string', notNull: true },
-    position: { type: 'int', notNull: true }
+  return db.addForeignKey(TABLE_NAME, 'deck', KEY_NAME, {
+    median_id: 'id'
+  }, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT'
   });
 };
 
 exports.down = function(db) {
-  return db.dropTable(TABLE_NAME);
+  return db.removeForeignKey(TABLE_NAME, KEY_NAME);
 };
 
 exports._meta = {

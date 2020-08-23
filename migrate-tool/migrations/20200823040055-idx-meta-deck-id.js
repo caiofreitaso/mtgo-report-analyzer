@@ -4,7 +4,7 @@ var dbm;
 var type;
 var seed;
 
-const TABLE_NAME = 'deck';
+const INDEX_NAME = 'idx__meta__deck_id';
 
 /**
   * We receive the dbmigrate dependency from dbmigrate initially.
@@ -17,16 +17,11 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return db.createTable(TABLE_NAME, {
-    id: { type: 'int', primaryKey: true, autoIncrement: true, unsigned: true },
-    tournament_id: { type: 'int', notNull: true },
-    player: { type: 'string', notNull: true },
-    position: { type: 'int', notNull: true }
-  });
+  return db.addIndex('meta', INDEX_NAME, ['deck_id']);
 };
 
 exports.down = function(db) {
-  return db.dropTable(TABLE_NAME);
+  return db.removeIndex(INDEX_NAME);
 };
 
 exports._meta = {
