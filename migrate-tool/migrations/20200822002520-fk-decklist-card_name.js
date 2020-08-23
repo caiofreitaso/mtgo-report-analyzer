@@ -5,6 +5,7 @@ var type;
 var seed;
 
 const TABLE_NAME = 'decklist';
+const KEY_NAME = 'fk__decklist__card_name';
 
 /**
   * We receive the dbmigrate dependency from dbmigrate initially.
@@ -17,17 +18,16 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return db.createTable(TABLE_NAME, {
-    id: { type: 'int', primaryKey: true, autoIncrement: true, unsigned: true },
-    deck_id: { type: 'int', notNull: true },
-    card_name: { type: 'string', notNull: true },
-    quantity: { type: 'int', unsigned: true, notNull: true },
-    is_sideboard: { type: 'bool', notNull: true }
+  return db.addForeignKey(TABLE_NAME, 'card', KEY_NAME, {
+    card_name: 'name'
+  }, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT'
   });
 };
 
 exports.down = function(db) {
-  return db.dropTable(TABLE_NAME);
+  return db.removeForeignKey(TABLE_NAME, KEY_NAME);
 };
 
 exports._meta = {

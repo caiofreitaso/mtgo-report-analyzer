@@ -4,8 +4,7 @@ var dbm;
 var type;
 var seed;
 
-const TABLE_NAME = 'decklist';
-const KEY_NAME = 'fk__decklist__card_id';
+const INDEX_NAME = 'idx__decklist__deck_id';
 
 /**
   * We receive the dbmigrate dependency from dbmigrate initially.
@@ -18,16 +17,11 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return db.addForeignKey(TABLE_NAME, 'card', KEY_NAME, {
-    card_id: 'name'
-  }, {
-    onDelete: 'RESTRICT',
-    onUpdate: 'RESTRICT'
-  });
+  return db.addIndex('decklist', INDEX_NAME, ['deck_id']);
 };
 
 exports.down = function(db) {
-  return db.removeForeignKey(TABLE_NAME, KEY_NAME);
+  return db.removeIndex(INDEX_NAME);
 };
 
 exports._meta = {

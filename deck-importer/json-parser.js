@@ -18,7 +18,7 @@ function fixString(str) {
 }
 function insertCard(card, sideboard) {
     let fixedName = fixString(card.CardName);
-    return "INSERT INTO decklist(deck_id,card_id,quantity,is_sideboard) VALUES"
+    return "INSERT INTO decklist(deck_id,card_name,quantity,is_sideboard) VALUES"
         + " ("
             + "this_deck,"
             + `(SELECT name FROM card WHERE name = '${fixedName}' OR name LIKE '${fixedName} // %'),`

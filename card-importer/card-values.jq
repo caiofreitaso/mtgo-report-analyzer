@@ -3,6 +3,7 @@ def join_lowercase: map("'" + (. | ascii_downcase) + "'") | join(",");
 "INSERT INTO card(name,types,colors,effective_colors,cmc,effective_cmc) VALUES\n" +
 (.data.cards
 | map(select(.supertypes | contains(["Basic"]) | not))
+| map(select(.side == null or .side == "a"))
 | map("("
   + "'" + (.name | gsub("'";"''")) + "',"
   + "ARRAY[" + (.supertypes + .types | join_lowercase) + "]::card_type[],"
