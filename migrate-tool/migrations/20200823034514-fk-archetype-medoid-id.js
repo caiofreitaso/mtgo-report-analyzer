@@ -5,7 +5,7 @@ var type;
 var seed;
 
 const TABLE_NAME = 'archetype';
-const KEY_NAME = 'fk__archetype__median_id';
+const KEY_NAME = 'fk__archetype__medoid_id';
 
 /**
   * We receive the dbmigrate dependency from dbmigrate initially.
@@ -19,7 +19,7 @@ exports.setup = function(options, seedLink) {
 
 exports.up = function(db) {
   return db.addForeignKey(TABLE_NAME, 'deck', KEY_NAME, {
-    median_id: 'id'
+    medoid_id: 'id'
   }, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT'

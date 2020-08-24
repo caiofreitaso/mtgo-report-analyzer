@@ -19,7 +19,7 @@ exports.setup = function(options, seedLink) {
 exports.up = function(db) {
   return db.createTable(TABLE_NAME, {
     id: { type: 'int', primaryKey: true, autoIncrement: true, unsigned: true },
-    median_id : { type: 'int', notNull: true },
+    medoid_id : { type: 'int', notNull: true },
     label: { type: 'string' }
   });
 };

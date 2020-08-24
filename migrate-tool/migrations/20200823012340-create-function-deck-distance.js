@@ -18,7 +18,7 @@ exports.setup = function(options, seedLink) {
 
 exports.up = function(db) {
   return db.runSql(`
-CREATE OR REPLACE FUNCTION deck_distance(deck_1 int, deck_2 int)
+CREATE OR REPLACE FUNCTION ${FUNCTION_NAME}(deck_1 int, deck_2 int)
 RETURNS bigint
 AS $$
 WITH
