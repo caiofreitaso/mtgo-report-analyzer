@@ -24,7 +24,6 @@ LANGUAGE plpgsql AS $$
 DECLARE
     current_medoid int;
 BEGIN
-    RAISE NOTICE '[%] Get medoid for %', clock_timestamp(), target_archetype;
     WITH near_decks
     AS (
         SELECT deck_id AS id
@@ -54,7 +53,6 @@ BEGIN
         LIMIT 1
     ) medoid
     INTO current_medoid;
-    RAISE NOTICE '[%] Medoid calculated.', clock_timestamp();
 
     RETURN current_medoid;
 END;

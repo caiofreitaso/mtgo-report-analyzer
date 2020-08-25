@@ -93,3 +93,5 @@ do
 
   cat ${SET}.json | jq "${CARD_JQ_FILTER}" -r | psql "${DATABASE_URL}"
 done
+
+psql "${DATABASE_URL}" < update-effective-colors.sql

@@ -33,7 +33,7 @@ sql += "DECLARE this_tournament int;\n";
 sql += "DECLARE this_deck int;\n";
 sql += "BEGIN\n";
 sql += "INSERT INTO tournament(type,date) VALUES"
-    + ` ('${fixString(TournamentData.Tournament.Name)}','${TournamentData.Tournament.Date}')`
+    + ` ('${fixString(TournamentData.Tournament.Name)}','${TournamentData.Decks[0].Date}')`
     + " RETURNING id INTO this_tournament;\n";
 
 for (let i = 0; i < TournamentData.Decks.length; i++) {

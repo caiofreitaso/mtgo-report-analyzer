@@ -25,7 +25,7 @@ DECLARE
     i INT := 0;
     is_another_archetype BOOL := false;
     current_archetype archetype.id%TYPE;
-    current_median archetype.medoid_id%TYPE;
+    current_medoid archetype.medoid_id%TYPE;
 BEGIN
 
 PERFORM id FROM meta WHERE deck_id = target_deck;
@@ -33,11 +33,12 @@ IF FOUND THEN
     RETURN false;
 END IF;
 
+RAISE NOTICE '[%] New archetype for %', clock_timestamp(), target_deck;
+
 INSERT INTO archetype(medoid_id)
 VALUES (target_deck)
 RETURNING id
 INTO current_archetype;
-RAISE NOTICE '[%] Archetype id: %', clock_timestamp(), current_archetype;
 
 LOOP
     EXIT WHEN i = iterations;
@@ -45,8 +46,7 @@ LOOP
     SELECT medoid_id
     FROM archetype
     WHERE id = current_archetype
-    INTO current_median;
-    RAISE NOTICE '[%] Current medoid_id: %', clock_timestamp(), current_median;
+    INTO current_medoid;
 
     DELETE FROM meta
     WHERE archetype_id = current_archetype;
@@ -56,34 +56,32 @@ LOOP
         current_archetype,
         id
     FROM deck
-    WHERE deck_distance(id, current_median) < max_distance;
-    RAISE NOTICE '[%] Decks added.', clock_timestamp();
+    WHERE deck_distance(id, current_medoid) < max_distance;
 
     SELECT get_medoid(current_archetype)
-    INTO current_median;
+    INTO current_medoid;
 
-    IF NOT FOUND THEN
+    IF current_medoid IS NULL THEN
         RAISE NOTICE '[%] Only one deck', clock_timestamp();
-        current_median := target_deck;
+        current_medoid := target_deck;
         EXIT;
     END IF;
 
-    EXIT WHEN current_median = (SELECT medoid_id
+    EXIT WHEN current_medoid = (SELECT medoid_id
     FROM archetype
     WHERE id = current_archetype
-    AND medoid_id = current_median);
+    AND medoid_id = current_medoid);
 
-    PERFORM medoid_id
-    FROM archetype
-    WHERE id <> current_archetype
-    AND medoid_id = current_median;
-
-    is_another_archetype := FOUND;
+    is_another_archetype := (0 = (SELECT deck_distance(medoid_id,current_medoid)
+        FROM archetype
+        WHERE id <> current_archetype
+        ORDER BY deck_distance
+        LIMIT 1));
 
     EXIT WHEN is_another_archetype;
 
     UPDATE archetype
-    SET medoid_id = current_median
+    SET medoid_id = current_medoid
     WHERE id = current_archetype;
 
     i := i + 1;
@@ -96,9 +94,9 @@ IF is_another_archetype THEN
     RETURN add_archetype(target_deck, iterations, max_distance/2);
 ELSE
     UPDATE meta
-    SET distance = deck_distance(deck_id, current_median)
+    SET distance = deck_distance(deck_id, current_medoid)
     WHERE archetype_id = current_archetype;
-    RAISE NOTICE '[%] Final median: %', clock_timestamp(), current_median;
+    RAISE NOTICE '[%] Final medoid: %', clock_timestamp(), current_medoid;
     
     RETURN true;
 END IF;

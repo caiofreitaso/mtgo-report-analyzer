@@ -13,3 +13,4 @@ cd deck-importer/
 ./import.sh
 cd ..
 
+echo 'select gather_archetypes();' | psql "$(./get-database-url.sh)"
