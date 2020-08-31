@@ -18,7 +18,7 @@ exports.setup = function(options, seedLink) {
 
 exports.up = function(db) {
   return db.runSql(`
-CREATE OR REPLACE FUNCTION ${FUNCTION_NAME}(deck_1 int, deck_2 int)
+CREATE OR REPLACE FUNCTION deck_distance(deck_1 int, deck_2 int)
 RETURNS bigint
 AS $$
 WITH
@@ -45,19 +45,8 @@ decklist_2 AS (
       quantity
     FROM nonland
     WHERE deck_id = deck_2
-)
-SELECT
-    COALESCE(SUM(a.diff),0) AS distance
-FROM (
-    SELECT
-        d1.card_name,
-        ABS(d1.quantity - d2.quantity) AS diff
-    FROM decklist_1 d1
-    JOIN decklist_2 d2
-    ON d1.card_name = d2.card_name
-    AND d1.quantity <> d2.quantity
-
-    UNION ALL
+),
+unique_cards AS (
     SELECT
         card_name,
         quantity AS diff
@@ -76,7 +65,26 @@ FROM (
         SELECT card_name
         FROM decklist_1
     )
-) a
+),
+movements AS (
+    SELECT
+        d1.card_name,
+        ABS(d1.quantity - d2.quantity) AS diff
+    FROM decklist_1 d1
+    JOIN decklist_2 d2
+    ON d1.card_name = d2.card_name
+    AND d1.quantity <> d2.quantity
+
+    UNION ALL
+    SELECT * FROM unique_cards
+),
+cards AS (
+    SELECT COUNT(*) AS count
+    FROM unique_cards
+)
+SELECT
+    (SELECT COALESCE(SUM(movements.diff),0) FROM movements)
+        * (SELECT 1 + COALESCE(count, 0) FROM cards) AS distance
 $$ LANGUAGE SQL;`);
 };
 

@@ -18,7 +18,7 @@ exports.setup = function(options, seedLink) {
 
 exports.up = function(db) {
   return db.runSql(`
-CREATE OR REPLACE FUNCTION ${FUNCTION_NAME}(target_archetype int)
+CREATE OR REPLACE FUNCTION get_medoid(target_archetype int)
 RETURNS int
 LANGUAGE plpgsql AS $$
 DECLARE

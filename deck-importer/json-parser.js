@@ -11,7 +11,8 @@ if (args.length != 1) {
     process.exit(1);
 }
 
-const TournamentData = require(args[0]);
+const filename = args[0];
+const TournamentData = require(filename);
 
 function fixString(str) {
     return str.replace("'","''");
@@ -32,8 +33,8 @@ sql += "DO $$\n";
 sql += "DECLARE this_tournament int;\n";
 sql += "DECLARE this_deck int;\n";
 sql += "BEGIN\n";
-sql += "INSERT INTO tournament(type,date) VALUES"
-    + ` ('${fixString(TournamentData.Tournament.Name)}','${TournamentData.Decks[0].Date}')`
+sql += "INSERT INTO tournament(type,date,filename) VALUES"
+    + ` ('${fixString(TournamentData.Tournament.Name)}','${TournamentData.Decks[0].Date}', '${filename}')`
     + " RETURNING id INTO this_tournament;\n";
 
 for (let i = 0; i < TournamentData.Decks.length; i++) {

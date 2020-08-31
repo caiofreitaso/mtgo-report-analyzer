@@ -19,9 +19,9 @@ exports.setup = function(options, seedLink) {
 exports.up = function(db) {
   return db.createTable(TABLE_NAME, {
     id: { type: 'int', primaryKey: true, autoIncrement: true, unsigned: true },
-    archetype_id: { type: 'int', notNull: true },
+    archetype_id: { type: 'int', notNull: false },
     deck_id: { type: 'int', notNull: true },
-    distance: { type: 'bigint', defaultValue: 120 }
+    distance: { type: 'bigint' }
   });
 };
 

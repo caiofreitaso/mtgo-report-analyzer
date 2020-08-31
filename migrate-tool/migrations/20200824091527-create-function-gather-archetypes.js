@@ -18,12 +18,10 @@ exports.setup = function(options, seedLink) {
 
 exports.up = function(db) {
   return db.runSql(`
-CREATE OR REPLACE FUNCTION ${FUNCTION_NAME}()
+CREATE OR REPLACE FUNCTION gather_archetypes(max_distance bigint, max_iterations int)
 RETURNS BOOL
 LANGUAGE plpgsql AS $$
 DECLARE
-    max_distance bigint := 32;
-    max_iterations int := 5;
     success bool := true;
 BEGIN
 
@@ -35,14 +33,6 @@ LOOP
 END LOOP;
 RAISE NOTICE '[%] Finished basic archetype gathering', clock_timestamp();
 
-success := true;
-WHILE success
-LOOP
-  SELECT merge_existing_archetypes(max_distance)
-  INTO success;
-END LOOP;
-RAISE NOTICE '[%] Finished merging archetypes', clock_timestamp();
-
 UPDATE meta
 SET archetype_id = (
     SELECT id
@@ -50,6 +40,7 @@ SET archetype_id = (
     ORDER BY deck_distance(archetype.medoid_id, deck_id)
     LIMIT 1
 );
+RAISE NOTICE '[%] Update decks archetypes', clock_timestamp();
 
 UPDATE meta
 SET distance = deck_distance(deck_id, (
@@ -57,6 +48,7 @@ SET distance = deck_distance(deck_id, (
   FROM archetype
   WHERE id = archetype_id)
 );
+RAISE NOTICE '[%] Update decks distances', clock_timestamp();
 
 DELETE FROM meta
 WHERE id IN (
@@ -67,6 +59,7 @@ WHERE id IN (
     AND m1.id > m2.id
 );
 RAISE NOTICE '[%] Done updating', clock_timestamp();
+
 RETURN true;
 END;
 $$;`);

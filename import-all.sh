@@ -13,4 +13,4 @@ cd deck-importer/
 ./import.sh
 cd ..
 
-echo 'select gather_archetypes();' | psql "$(./get-database-url.sh)"
+echo 'select gather_archetypes(250,5);' | psql $(node -e 'console.log(require("./config.js").databaseUrl())')

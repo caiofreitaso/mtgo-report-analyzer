@@ -11,6 +11,7 @@ let command = commands.join(' ');
 
 exec(command, (err, stdout, stderr) => {
   if (err) {
+    console.log(stdout);
     console.error(err);
     process.exit(1);
   }
