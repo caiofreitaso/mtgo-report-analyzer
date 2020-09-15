@@ -4,7 +4,7 @@ var dbm;
 var type;
 var seed;
 
-const FUNCTION_NAME = 'view_meta_weighted';
+const FUNCTION_NAME = 'view_meta_trimmed';
 
 /**
   * We receive the dbmigrate dependency from dbmigrate initially.
@@ -29,30 +29,9 @@ RETURNS TABLE(
 LANGUAGE plpgsql AS $$
 BEGIN
 RETURN QUERY
-WITH total AS (
-    SELECT COUNT(*)
-    FROM meta
-    JOIN deck
-    ON deck.id = meta.deck_id
-    JOIN tournament
-    ON deck.tournament_id = tournament.id
-    WHERE tournament.date BETWEEN start_time AND end_time
-)
-SELECT
-    archetype.id,
-    archetype.label,
-    SUM(FLOOR(POW(2, 5 - CEIL(GREATEST(1.0,LOG(2, deck.position)))))) AS metric,
-    COUNT(*) AS meta_count,
-    ROUND(100.0 * COUNT(*)/(SELECT count FROM total),3) AS meta_share
-FROM meta
-JOIN archetype
-ON meta.archetype_id = archetype.id
-JOIN deck
-ON deck.id = meta.deck_id
-JOIN tournament
-ON deck.tournament_id = tournament.id
-WHERE tournament.date BETWEEN start_time AND end_time
-GROUP BY archetype.id, archetype.label
+SELECT *
+FROM view_meta_weighted(start_time, end_time) v
+WHERE v.meta_count > 1
 ORDER BY metric DESC;
 END;
 $$;`);

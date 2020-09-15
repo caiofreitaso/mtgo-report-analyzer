@@ -2,5 +2,8 @@
 
 JSON_FILE="$1"
 
-echo "$1"
-./json-parser.js "$1" | psql $(../get-database-url.sh) -q
+if [ -n "${JSON_FILE}" ]
+then
+    echo "${JSON_FILE}"
+    ./json-parser.js "${JSON_FILE}" | psql $(../get-database-url.sh) -q
+fi

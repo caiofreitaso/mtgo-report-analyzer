@@ -1,13 +1,18 @@
 #!/bin/bash
 
-cd migrate-tool/
-npm start reset
-npm start up
-cd ..
+RESET="$1"
 
-cd card-importer/
-./import.sh
-cd ..
+if [ "${RESET}" == "reset" ]
+then
+    cd migrate-tool/
+    npm start reset
+    npm start up
+    cd ..
+
+    cd card-importer/
+    ./import.sh
+    cd ..
+fi
 
 cd deck-importer/
 ./import.sh
