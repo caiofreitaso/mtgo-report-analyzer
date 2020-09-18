@@ -2,6 +2,10 @@
 
 RESET="$1"
 
+cd MTGODecklistCache
+git pull origin master
+cd ..
+
 if [ "${RESET}" == "reset" ]
 then
     cd migrate-tool/

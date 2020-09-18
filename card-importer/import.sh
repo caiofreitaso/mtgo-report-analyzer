@@ -74,6 +74,7 @@ MTG_MODERN_SETS=(
 "ELD"
 "THB"
 "IKO"
+"ZNR"
 )
 
 CARD_JQ_FILTER="$(cat card-values.jq)"
