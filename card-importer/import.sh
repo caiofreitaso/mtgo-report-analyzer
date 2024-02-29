@@ -4,6 +4,7 @@ set -e
 MTG_MODERN_SETS=(
 "MH1"
 "MH2"
+"G18"
 
 "8ED"
 "9ED"
@@ -79,6 +80,10 @@ MTG_MODERN_SETS=(
 "KHM"
 "STX"
 "AFR"
+"MID"
+"VOW"
+"NEO"
+"SNC"
 )
 
 CARD_JQ_FILTER="$(cat card-values.jq)"

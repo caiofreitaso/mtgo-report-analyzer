@@ -22,7 +22,7 @@ CREATE OR REPLACE FUNCTION ${FUNCTION_NAME}(start_time timestamp, end_time times
 RETURNS TABLE(
     card_name decklist.card_name%TYPE,
     metric numeric,
-    avr_metric numeric,
+    avg_metric numeric,
     meta_count bigint,
     meta_share numeric
 )
@@ -47,7 +47,7 @@ cards AS (
     WHERE is_nonland_main
     GROUP BY decklist.card_name
 ),
-avr AS (
+avg AS (
     SELECT
         *,
         ROUND(cards.metric/cards.meta_count, 3) AS average,
@@ -55,10 +55,10 @@ avr AS (
     FROM cards
 )
 SELECT
-    avr.card_name,
-    avr.metric,
-    avr.average AS avr_metric,
-    avr.meta_count AS meta_count,
+    avg.card_name,
+    avg.metric,
+    avg.average AS avg_metric,
+    avg.meta_count AS meta_count,
     ROUND(100.0 * avr.meta_count/avr.count,3) AS meta_share
 FROM avr
 ORDER BY avr_metric DESC;

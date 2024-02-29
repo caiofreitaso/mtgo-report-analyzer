@@ -23,6 +23,7 @@ RETURNS TABLE(
     archetype_id meta.archetype_id%TYPE,
     label archetype.label%TYPE,
     metric numeric,
+    avg_metric numeric,
     meta_count bigint,
     meta_share numeric
 )
@@ -42,6 +43,7 @@ SELECT
     archetype.id,
     archetype.label,
     SUM(FLOOR(POW(2, 5 - CEIL(GREATEST(1.0,LOG(2, deck.position)))))) AS metric,
+    ROUND(SUM(FLOOR(POW(2, 5 - CEIL(GREATEST(1.0,LOG(2, deck.position))))))/COUNT(*), 3) AS avg_metric,
     COUNT(*) AS meta_count,
     ROUND(100.0 * COUNT(*)/(SELECT count FROM total),3) AS meta_share
 FROM meta

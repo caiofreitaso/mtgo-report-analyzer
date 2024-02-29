@@ -4,7 +4,7 @@ var dbm;
 var type;
 var seed;
 
-const FUNCTION_NAME = 'view_meta_trimmed';
+const FUNCTION_NAME = 'view_cards_trimmed';
 
 /**
   * We receive the dbmigrate dependency from dbmigrate initially.
@@ -20,8 +20,7 @@ exports.up = function(db) {
   return db.runSql(`
 CREATE OR REPLACE FUNCTION ${FUNCTION_NAME}(start_time timestamp, end_time timestamp)
 RETURNS TABLE(
-    archetype_id meta.archetype_id%TYPE,
-    label archetype.label%TYPE,
+    card_name decklist.card_name%TYPE,
     metric numeric,
     avg_metric numeric,
     meta_count bigint,
@@ -31,7 +30,7 @@ LANGUAGE plpgsql AS $$
 BEGIN
 RETURN QUERY
     SELECT *
-    FROM view_meta_weighted(start_time, end_time) v
+    FROM view_cards_weighted(start_time, end_time) v
     WHERE v.meta_count > 1
     ORDER BY metric DESC;
 END;
